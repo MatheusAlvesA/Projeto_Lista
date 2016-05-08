@@ -1,15 +1,15 @@
 #include "vector.h"
 
 template <typename T>
-  typename Vector<T>::iterator & Vector<T>::iterator::operator++ () {
+  typename Vector<T>::iterator & Vector<T>::iterator::operator++ (int x) {
   	current++;
-  	return this;
+  	return *this;
   }
 
 template <typename T>
-  typename Vector<T>::iterator & Vector<T>::iterator::operator-- () {
+  typename Vector<T>::iterator & Vector<T>::iterator::operator-- (int x) {
   	current--;
-  	return this;
+  	return *this;
   }
 // CLASSE PRINCIPAL VECTOR
 template <typename T>
@@ -19,19 +19,20 @@ template <typename T>
 
 template <typename T>
   Vector<T>::~Vector () {
-  	delete [] vetor;
+        delete [] this->vetor;
   }
 
 template <typename T>
   Vector<T>::Vector (const Vector & origin) {
-  	this->vetor = origin->vetor;
-  	this->capacidade = origin->capacidade;
-  	this->_size = origin->_size;
+  	this->vetor = origin.vetor;
+  	this->capacidade = origin.capacidade;
+  	this->_size = origin._size;
   }
 
 template <typename T>
   T & Vector<T>::at( size_type idx) {
-  	if(idx >= _size) throw std::length_error("indice Inválido");
+  	if(idx >= capacidade) reserve(idx*2); // para evitar erros;
+    _size++;
   	return vetor[idx];
   }
 
@@ -47,26 +48,26 @@ template <typename T>
 
 template <typename T>
   const T & Vector<T>::front() {
-    if(size <= 0) throw std::length_error("indice Inválido");
+    if(_size <= 0) throw std::length_error("indice Inválido");
     return vetor[0];
   }
 
 template <typename T>
   const T & Vector<T>::back() {
-    if(size <= 0) throw std::length_error("indice Inválido");
-    return vetor[size-1];
+    if(_size <= 0) throw std::length_error("indice Inválido");
+    return vetor[_size-1];
   }
 
 template <typename T>
   void Vector<T>::push_back(const T &x) {
-    if(size >= capacidade) reserve(capacidade*2);
-    return vetor[_size-1];
+    if(_size >= capacidade) reserve(_size*2);
+    vetor[_size] = x;
     _size++;
   }
 
 template <typename T>
   const T & Vector<T>::pop_back() {
-    if(_size <= 0) throw std::length_error("indice Inválido");
+    if(_size <= 0) throw std::length_error("Tentativa de remover de uma lista vazia");
     _size--;
     return vetor[_size];
   }
@@ -78,8 +79,13 @@ template <typename T>
   }
 
 template <typename T>
-T & Vector<T>::operator[]( size_type idx) {
-   if(idx >= capacidade) reserve(idx+1); // para evitar erros
-   _size++;
+T & Vector<T>::operator[]( size_type idx) { 
   return this->vetor[idx];
+}
+
+template <typename T>
+void Vector<T>::clear() {
+    for(size_type x = 0; x < _size; x++)
+        vetor[x].~T(); // deleta os objetos um a um
+ _size = 0;
 }
