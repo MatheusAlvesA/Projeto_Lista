@@ -15,7 +15,7 @@ struct Node {
   Node *next; // <! Pointer to the next node in the list .
   Node *last;
   // <! Basic constructor .
-  Node(const T & d = T() , Node *p = nullptr, Node *n = nullptr Node *l = nullptr) : data(d), next(n), last(l) { /* Empty  */}
+  Node(const T & d = T(), Node *n = nullptr, Node *l = nullptr) : data(d), next(n), last(l) { /* Empty  */}
 };
 int m_size;
 Node m_head;
@@ -32,6 +32,10 @@ class const_iterator {
   
   const_iterator &operator++ (); // ++ it ;
   const_iterator &operator++ (int);
+
+  const_iterator & operator-- ();
+  const_iterator & operator-- (int);
+  
   Node *operator= (const Node* n) {current = n;}
   bool operator== (const const_iterator &rhs) const {return (this->current == rhs.current);}
   bool operator!= (const const_iterator &rhs) const {return (this->current != rhs.current);}
@@ -95,5 +99,5 @@ iterator erase_after(const_iterator first , const_iterator last ); // deleta tud
 const_iterator find(const T &x) const; // encontra e retorna um iterador para o elemento passado
 };
 
-#include "Flist.cpp"
+#include "DFlist.cpp"
 #endif

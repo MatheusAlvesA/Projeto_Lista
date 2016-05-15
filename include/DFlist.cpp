@@ -12,7 +12,7 @@ List<T>::List() {
 template <typename T>
 List<T>::List(const List & original) {
     this->m_head = original.m_head; // setando o no cabeça
-    this->m_htail = original.m_tail; // setando o no rabo
+    this->m_tail = original.m_tail; // setando o no rabo
     this->m_size = original.m_size; // setando o tamanho
 }
 
@@ -24,7 +24,7 @@ List<T>::~List() {
 template <typename T>
 List<T> & List<T>::operator= (const List &original) {
     this->m_head = original.m_head; // setando o no cabeça
-    this->m_htail = original.m_tail; // setando o no rabo
+    this->m_tail = original.m_tail; // setando o no rabo
     this->m_size = original.m_size; // setando o tamanho
 }
 
@@ -43,7 +43,7 @@ template <typename T>
 void List<T>::push_back(const T &x) {
   Node *novo = new Node();
   novo->next = &this->m_tail; // aponta para o tail
-  novo->last = this->m_tail->last; // aponta para o que antes era o ultimo
+  novo->last = this->m_tail.last; // aponta para o que antes era o ultimo
   this->m_tail.last->next = novo; // aponta para o novo ultimo
   novo->data = x;
   m_tail.last = novo; // registrando esse como sendo o novo ultimo
@@ -194,14 +194,15 @@ typename List<T>::iterator List<T>::erase_after(typename List<T>::const_iterator
   delete temp;
   this->m_size--;
   itr++;
-  return itr;
+  List<T>::iterator retorno = itr.ptr();
+  return retorno;
 }
 
 template <typename T>
 typename List<T>::iterator List<T>::erase_after(typename List<T>::const_iterator first , typename List<T>::const_iterator last ) {
   Node *temp = (first.ptr())->next; // apontando para o que vai ser deletado
   (first.ptr())->next = last.ptr();
-  (last->ptr())->last = first.ptr();
+  (last.ptr())->last = first.ptr();
   first++;
   while(first != last) { // a sobrecarga de operador é util aqui
     first++;
